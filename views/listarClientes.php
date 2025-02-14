@@ -61,32 +61,57 @@ if (isset($_SESSION['mensagem'])) {
         th {
             background-color: #f2f2f2;
         }
+        .btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+        }
+        .btn-aprovar {
+            background-color: #28a745;
+        }
+        .btn-rejeitar {
+            background-color: #dc3545;
+        }
     </style>
 </head>
 <body>
-    <h1>Lista de Clientes</h1>
+    <h1>Lista de Clientes e Solicitações</h1>
 
-    <!-- Tabela de clientes -->
+    <!-- Tabela de clientes e solicitações -->
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th>ID Cliente</th>
                 <th>Nome</th>
                 <th>E-mail</th>
                 <th>Telefone</th>
+                <th>Serviço Solicitado</th>
+                <th>Data da Solicitação</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
             <?php
-            // Lista os clientes
-            $clientes = $database->listarClientes();
-            foreach ($clientes as $cliente) :
+            // Lista as solicitações com detalhes do cliente e do serviço
+            $solicitacoes = $database->listarSolicitacoes();
+            foreach ($solicitacoes as $solicitacao) :
             ?>
                 <tr>
-                    <td><?= $cliente['id_cliente'] ?></td>
-                    <td><?= $cliente['nome'] ?></td>
-                    <td><?= $cliente['email'] ?></td>
-                    <td><?= $cliente['telefone'] ?></td>
+                    <td><?= $solicitacao['cliente_id'] ?></td>
+                    <td><?= $solicitacao['cliente_nome'] ?></td>
+                    <td><?= $solicitacao['cliente_email'] ?></td>
+                    <td><?= $solicitacao['cliente_telefone'] ?></td>
+                    <td><?= $solicitacao['servico_nome'] ?></td>
+                    <td><?= $solicitacao['data_solicitacao'] ?></td>
+                    <td>
+                        <form action="processarSolicitacao.php" method="POST" style="display: inline;">
+                            <input type="hidden" name="solicitacao_id" value="<?= $solicitacao['solicitacao_id'] ?>">
+                            <button type="submit" name="acao" value="aprovar" class="btn btn-aprovar">Aprovar</button>
+                            <button type="submit" name="acao" value="rejeitar" class="btn btn-rejeitar">Rejeitar</button>
+                        </form>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
