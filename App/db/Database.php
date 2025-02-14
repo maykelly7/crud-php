@@ -154,5 +154,51 @@ class Database {
             $sql->execute([$nome, $email, $telefone, $id_cliente]);
         }
     }
+
+
+    
+    public function solicitarServico($cliente_id, $id_servico) {
+    if (empty($cliente_id) || empty($id_servico)) {
+        throw new Exception("Dados inválidos para solicitação.");
+    }
+    
+    // SQL para adicionar a solicitação
+    $query = "INSERT INTO solicitacoes (cliente_id, servico_id) VALUES (?, ?)";
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute([$cliente_id, $id_servico]);
+    
+    if ($stmt->rowCount() === 0) {
+        throw new Exception("Falha ao registrar solicitação.");
+    }
+
+    
+}
+    
+    public function listarSolicitacoes() {
+        $query = "SELECT * FROM solicitacoes";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getClienteById($cliente_id) {
+        $query = "SELECT nome FROM clientes WHERE id_cliente = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$cliente_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getServicoById($servico_id) {
+        $query = "SELECT nome FROM servicos WHERE id_servico = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$servico_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
+
+
+
+
 }
 ?>

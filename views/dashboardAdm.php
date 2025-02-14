@@ -90,6 +90,7 @@ if (isset($_SESSION['mensagem'])) {
         <a href="cadastrarServico.php"><button>Cadastrar Serviço</button></a>
         <a href="listarServico.php"><button>Listar Serviços</button></a>
         <a href="listarClientes.php"><button>Listar clientes</button></a>
+        <a href="listarSolicitacoes.php"><button>Listar solicitacoes</button></a>
     </div>
     <a href="../index.php">Sair</a>
 </body>

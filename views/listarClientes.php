@@ -5,28 +5,6 @@ require_once '../App/db/Database.php';
 // Instancia a classe Database com o nome da tabela
 $database = new Database('cliente');
 
-// Verifica se o parâmetro "excluir" está presente na URL
-if (isset($_GET['excluir'])) {
-    $id_cliente = $_GET['excluir'];
-
-    try {
-        // Exclui o cliente
-        $database->excluirCliente($id_cliente);
-
-        // Define a mensagem de sucesso na sessão
-        $_SESSION['mensagem'] = "Cliente excluído com sucesso!";
-        $_SESSION['tipo_mensagem'] = "sucesso"; // Pode ser usado para estilizar a mensagem
-    } catch (Exception $e) {
-        // Define a mensagem de erro na sessão
-        $_SESSION['mensagem'] = "Erro ao excluir cliente: " . $e->getMessage();
-        $_SESSION['tipo_mensagem'] = "erro";
-    }
-
-    // Redireciona de volta para a lista de clientes
-    header('Location: listarClientes.php');
-    exit();
-}
-
 // Verifica se há uma mensagem na sessão
 if (isset($_SESSION['mensagem'])) {
     $tipo_mensagem = $_SESSION['tipo_mensagem'] ?? 'sucesso'; // Define o tipo de mensagem (sucesso ou erro)
@@ -83,26 +61,10 @@ if (isset($_SESSION['mensagem'])) {
         th {
             background-color: #f2f2f2;
         }
-        .btn {
-            padding: 5px 10px;
-            text-decoration: none;
-            border-radius: 4px;
-        }
-        .btn.editar {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn.excluir {
-            background-color: #dc3545;
-            color: white;
-        }
     </style>
 </head>
 <body>
-    <h1>Listar Clientes</h1>
-
-    <!-- Link para adicionar novo cliente -->
-    <a href="cadastrarCliente.php" class="btn editar">Adicionar Cliente</a>
+    <h1>Lista de Clientes</h1>
 
     <!-- Tabela de clientes -->
     <table>
@@ -112,7 +74,6 @@ if (isset($_SESSION['mensagem'])) {
                 <th>Nome</th>
                 <th>E-mail</th>
                 <th>Telefone</th>
-                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -126,10 +87,6 @@ if (isset($_SESSION['mensagem'])) {
                     <td><?= $cliente['nome'] ?></td>
                     <td><?= $cliente['email'] ?></td>
                     <td><?= $cliente['telefone'] ?></td>
-                    <td>
-                        <a href="editarCliente.php?editar=<?= $cliente['id_cliente'] ?>" class="btn editar">Editar</a>
-                        <a href="listarClientes.php?excluir=<?= $cliente['id_cliente'] ?>" class="btn excluir" onclick="return confirm('Tem certeza que deseja excluir este cliente?')">Excluir</a>
-                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
